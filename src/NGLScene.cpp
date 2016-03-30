@@ -35,14 +35,19 @@ NGLScene::NGLScene()
   BoxSizeZ = 2.0;
 
   NumberOfDrops = 0;
+  NumberOfPlanes = 0;
   DropsPerTick = 1;
 
-  m_data.resize(3*(float)NumberOfDrops);
+  WindDir[0] = 0.00001;
+  WindDir[1] = 0.0;
+  WindDir[2] = 0.00001;
+
+  m_data.resize(3*NumberOfDrops);
   Box.resize(58*sizeof(float));
+  PlanesData.resize(18*NumberOfPlanes);
 
   CreateBox();
-
-  MainRainCloud.AddRainDrop();
+  MainRainCloud.AddPlane(0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0);
 
 }
 
@@ -198,8 +203,6 @@ void NGLScene::initializeGL()
 	glViewport(0,0,width(),height());
   startTimer(5);
   glPointSize(5);
-	m_text.reset(new  ngl::Text(QFont("Arial",18)));
-	m_text->setScreenSize(width(),height());
 
 }
 
@@ -237,15 +240,7 @@ void NGLScene::paintGL()
 
 	shader->setShaderParamFromMat4("MVP",MVP);
 
-  //creating VAO for RainDrops
-  ngl::VertexArrayObject *vao =ngl::VertexArrayObject::createVOA(GL_POINTS);
-	vao->bind();
-	vao->setData(m_data.size()*sizeof(ngl::Vec3),m_data[0].m_x);
-  vao->setVertexAttributePointer(0,3,GL_FLOAT,0,0);
-	vao->setNumIndices(m_data.size());
-	vao->draw();
-	vao->unbind();
-	vao->removeVOA();
+
 
 
   ngl::VertexArrayObject *Boundary = ngl::VertexArrayObject::createVOA(GL_LINES);
@@ -257,6 +252,28 @@ void NGLScene::paintGL()
   Boundary->draw();
   Boundary->unbind();
   Boundary->removeVOA();
+
+  //creating VAO for RainDrops
+  ngl::VertexArrayObject *vao =ngl::VertexArrayObject::createVOA(GL_POINTS);
+  vao->bind();
+  vao->setData(m_data.size()*sizeof(ngl::Vec3),m_data[0].m_x);
+  vao->setVertexAttributePointer(0,3,GL_FLOAT,0,0);
+  vao->setNumIndices(m_data.size());
+
+  vao->draw();
+  vao->unbind();
+  vao->removeVOA();
+
+    //VAO for poly planes
+  ngl::VertexArrayObject *Planes =ngl::VertexArrayObject::createVOA(GL_TRIANGLES);
+  Planes->bind();
+  Planes->setData(PlanesData.size()*sizeof(ngl::Vec3),PlanesData[0].m_x);
+  Planes->setVertexAttributePointer(0,3,GL_FLOAT,0,0);
+  Planes->setNumIndices(PlanesData.size());
+
+  Planes->draw();
+  Planes->unbind();
+  Planes->removeVOA();
 
 }
 
@@ -270,21 +287,44 @@ void NGLScene::timerEvent(QTimerEvent *_event)
 {
   NGL_UNUSED(_event);
   m_data.clear();
+  PlanesData.clear();
 
-  //MainRainCloud.AddMultipleRainDrops(DropsPerTick);
+
+
+  MainRainCloud.SimulateFrame(BoxSizeX, BoxSizeY, BoxSizeZ, &WindDir[0], DropsPerTick);
+
+  NumberOfPlanes = MainRainCloud.GetNumberOfPlanes();
 
   NumberOfDrops = MainRainCloud.GetNumberOfRainDrops();
 
+  float PlanesShapes[18*NumberOfPlanes];
+
   float DropsPositions[NumberOfDrops*3];
 
-
-  MainRainCloud.SimulateFrame(BoxSizeX, BoxSizeY, BoxSizeZ);
+  MainRainCloud.GetPlanesVertexs(&PlanesShapes[0]);
 
   MainRainCloud.GetDropsPositions(&DropsPositions[0]);
 
-  m_data.resize(3*(float)NumberOfDrops);
+ PlanesData.resize(6*NumberOfPlanes);
+
+  m_data.resize(3*NumberOfDrops);
 
   int j = 0;
+
+  for (int i = 0; i < 18*NumberOfPlanes; i += 3)
+  {
+
+      PlanesData[j].m_x = PlanesShapes[i];
+      PlanesData[j].m_y = PlanesShapes[i+1];
+      PlanesData[j].m_z = PlanesShapes[i+2];
+
+      j++;
+
+  }
+
+
+
+  j = 0;
 
   for (int i = 0; i < NumberOfDrops*3; i += 3)
   {
@@ -293,6 +333,7 @@ void NGLScene::timerEvent(QTimerEvent *_event)
     m_data[j].m_y = DropsPositions[i+1];
     m_data[j].m_z = DropsPositions[i+2];
 
+    j++;
   }
 
 

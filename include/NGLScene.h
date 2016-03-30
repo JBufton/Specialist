@@ -138,10 +138,12 @@ private:
     void timerEvent(QTimerEvent *_event);
     // Data to plot each frame
     std::vector <ngl::Vec3> m_data;
-    // text render class
-    std::unique_ptr <ngl::Text> m_text;
 
     std::vector <ngl::Vec3> Box;
+
+    std::vector <ngl::Vec3> PlanesData;
+
+    int NumberOfPlanes;
 
     void CreateBox();
 
@@ -153,6 +155,7 @@ private:
 
     int NumberOfDrops;
     int DropsPerTick;
+    float WindDir[3];
 
 };
 
