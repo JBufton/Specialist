@@ -46,6 +46,9 @@ int plane::IsOnPlane(float TestX, float TestY, float TestZ)
      * if the point it in front then result will be positive
      * if the point is behind the plane then the result will be negative
      * if the point is on the plane then the result will be 0
+     *
+     * then calculate if the point is within the boundaries of the actual plane shape
+     *
      * */
 
 }
