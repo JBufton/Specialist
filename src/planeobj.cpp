@@ -13,7 +13,45 @@ plane::plane(float XPos, float YPos, float ZPos, float NewXSize, float NewZSize,
     ZRot = NewZRot;
     Roughness = NewRoughness;
 
+    CalcNorm();
+
 }
+
+
+
+void plane::CalcNorm()
+{
+    //-----------Normal is defaulted as pointing up
+    Norm[0] = 0.0;
+    Norm[1] = 1.0;
+    Norm[2] = 0.0;
+
+    //----------Rotate normal according to XRot and ZRot
+
+
+
+}
+
+
+
+
+int plane::IsOnPlane(float TestX, float TestY, float TestZ)
+{
+
+    /*
+     * Calculate the length of the vector between the point to test and the plane position (Test-Pos)
+     *
+     * Calculate the dot product between the new vector and the normal of the plane
+     *
+     * if the point it in front then result will be positive
+     * if the point is behind the plane then the result will be negative
+     * if the point is on the plane then the result will be 0
+     * */
+
+}
+
+
+
 
 
 void plane::GetShape(float *OutVec)

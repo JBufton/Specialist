@@ -10,10 +10,13 @@ public:
     float YPosAtLocation(float, float);
     float GetRoughness(){return Roughness;}
 
+    int IsOnPlane(float, float, float);
+    void CalcNorm();
     void GetShape(float *);
 
 private:
     float Pos[3];
+    float Norm[3];
     float XSize;
     float ZSize;
     float XRot;
