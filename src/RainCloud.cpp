@@ -33,6 +33,15 @@ void RainCloud::AddPlane(float XPos, float YPos, float ZPos, float XSize, float 
 
 }
 
+void RainCloud::DeletePlane()
+{
+
+    PlaneList.pop_back();
+
+    NumberOfPlanes--;
+
+}
+
 
 
 

@@ -15,7 +15,7 @@ CXX           = clang++
 DEFINES       = -DQT5BUILD -DQT5BUILD -DNGL_DEBUG -DQT_QML_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -msse -msse2 -msse3 -march=native -g -std=c++11 -Wall -W -Wno-unused-parameter -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -Iinclude -I/home/joshua/NGL/include -I/home/joshua/Qt/5.5/gcc_64/include -I/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL -I/home/joshua/Qt/5.5/gcc_64/include/QtWidgets -I/home/joshua/Qt/5.5/gcc_64/include/QtGui -I/home/joshua/Qt/5.5/gcc_64/include/QtCore -Imoc -I/home/joshua/Qt/5.5/gcc_64/mkspecs/linux-clang
+INCPATH       = -I. -Iinclude -I/home/joshua/NGL/include -I/home/joshua/Qt/5.5/gcc_64/include -I/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL -I/home/joshua/Qt/5.5/gcc_64/include/QtWidgets -I/home/joshua/Qt/5.5/gcc_64/include/QtGui -I/home/joshua/Qt/5.5/gcc_64/include/QtCore -Imoc -I. -I/home/joshua/Qt/5.5/gcc_64/mkspecs/linux-clang
 QMAKE         = /home/joshua/Qt/5.5/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -49,19 +49,26 @@ OBJECTS_DIR   = obj/
 ####### Files
 
 SOURCES       = src/main.cpp \
+		src/MainWindow.cpp \
 		src/NGLScene.cpp \
 		src/planeobj.cpp \
 		src/RainCloud.cpp \
-		src/RainDrop.cpp 
+		src/RainDrop.cpp moc/moc_MainWindow.cpp \
+		moc/moc_NGLScene.cpp
 OBJECTS       = obj/main.o \
+		obj/MainWindow.o \
 		obj/NGLScene.o \
 		obj/planeobj.o \
 		obj/RainCloud.o \
-		obj/RainDrop.o
-DIST          = RainSystem.pro include/NGLScene.h \
+		obj/RainDrop.o \
+		obj/moc_MainWindow.o \
+		obj/moc_NGLScene.o
+DIST          = RainSystem.pro include/MainWindow.h \
+		include/NGLScene.h \
 		include/planeobj.h \
 		include/RainCloud.h \
 		include/RainDrop.h src/main.cpp \
+		src/MainWindow.cpp \
 		src/NGLScene.cpp \
 		src/planeobj.cpp \
 		src/RainCloud.cpp \
@@ -93,7 +100,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET):  $(OBJECTS)  
+$(TARGET): ui_MainWindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: RainSystem.pro .qmake.cache /home/joshua/Qt/5.5/gcc_64/mkspecs/linux-clang/qmake.conf /home/joshua/Qt/5.5/gcc_64/mkspecs/features/spec_pre.prf \
@@ -395,8 +402,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents include/NGLScene.h include/planeobj.h include/RainCloud.h include/RainDrop.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/NGLScene.cpp src/planeobj.cpp src/RainCloud.cpp src/RainDrop.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents include/MainWindow.h include/NGLScene.h include/planeobj.h include/RainCloud.h include/RainDrop.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/MainWindow.cpp src/NGLScene.cpp src/planeobj.cpp src/RainCloud.cpp src/RainDrop.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ui/MainWindow.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -419,19 +427,340 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc/moc_MainWindow.cpp moc/moc_NGLScene.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc/moc_MainWindow.cpp moc/moc_NGLScene.cpp
+moc/moc_MainWindow.cpp: /home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QMainWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qwidget.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qglobal.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qconfig.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfeatures.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtypetraits.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsysinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlogging.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qflags.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_gcc.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv7.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv6.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv5.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_ia64.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_mips.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_x86.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_unix.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmutex.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qnumeric.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qnamespace.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobject.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstring.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qchar.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbytearray.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qrefcount.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qarraydata.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qalgorithms.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qiterator.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringlist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qregexp.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcoreevent.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmetatype.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qisenum.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobject_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmargins.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qrect.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsize.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qpoint.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpalette.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcolor.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qrgb.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qbrush.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qpair.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvector.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qmatrix.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpolygon.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qregion.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qdatastream.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qiodevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qline.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtransform.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpainterpath.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qimage.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpixelformat.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpixmap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qshareddata.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qhash.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfont.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcursor.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qkeysequence.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qevent.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvariant.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qdebug.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtextstream.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlocale.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qset.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qurl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qurlquery.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfile.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfiledevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qvector2d.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qicon.h \
+		include/NGLScene.h \
+		/home/joshua/NGL/include/ngl/Camera.h \
+		/home/joshua/NGL/include/ngl/Types.h \
+		/home/joshua/NGL/include/ngl/glew.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/QGLContext \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qgl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qt_windows.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengles2ext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintengine.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpainter.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtextoption.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpen.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QSurfaceFormat \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/joshua/NGL/include/ngl/Vec4.h \
+		/home/joshua/NGL/include/ngl/Vec2.h \
+		/home/joshua/NGL/include/ngl/Vec3.h \
+		/home/joshua/NGL/include/ngl/Mat4.h \
+		/home/joshua/NGL/include/ngl/RibExport.h \
+		/home/joshua/NGL/include/ngl/Plane.h \
+		/home/joshua/NGL/include/ngl/AABB.h \
+		/home/joshua/NGL/include/ngl/BBox.h \
+		/home/joshua/NGL/include/ngl/VertexArrayObject.h \
+		/home/joshua/NGL/include/ngl/Colour.h \
+		/home/joshua/NGL/include/ngl/Light.h \
+		/home/joshua/NGL/include/ngl/Text.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QHash \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QFont \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QOpenGLWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QPaintDeviceWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintdevicewindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QObject \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QEvent \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QMargins \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QRect \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qsurface.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QPaintDevice \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QOpenGLContext \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglcontext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QScopedPointer \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QImage \
+		include/RainCloud.h \
+		include/RainDrop.h \
+		include/planeobj.h \
+		include/MainWindow.h
+	/home/joshua/Qt/5.5/gcc_64/bin/moc $(DEFINES) -I/home/joshua/Qt/5.5/gcc_64/mkspecs/linux-clang -I/home/joshua/Documents/Projects/Specialist/Specialist -I/home/joshua/Documents/Projects/Specialist/Specialist/include -I/home/joshua/NGL/include -I/home/joshua/Qt/5.5/gcc_64/include -I/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL -I/home/joshua/Qt/5.5/gcc_64/include/QtWidgets -I/home/joshua/Qt/5.5/gcc_64/include/QtGui -I/home/joshua/Qt/5.5/gcc_64/include/QtCore include/MainWindow.h -o moc/moc_MainWindow.cpp
+
+moc/moc_NGLScene.cpp: /home/joshua/NGL/include/ngl/Camera.h \
+		/home/joshua/NGL/include/ngl/Types.h \
+		/home/joshua/NGL/include/ngl/glew.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/QGLContext \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qgl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qglobal.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qconfig.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfeatures.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtypetraits.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsysinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlogging.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qflags.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_gcc.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv7.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv6.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv5.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_ia64.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_mips.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_x86.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_unix.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmutex.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qnumeric.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qt_windows.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengles2ext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qwidget.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qnamespace.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobject.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstring.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qchar.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbytearray.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qrefcount.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qarraydata.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qalgorithms.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qiterator.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringlist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qregexp.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcoreevent.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmetatype.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qisenum.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobject_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmargins.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qrect.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsize.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qpoint.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpalette.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcolor.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qrgb.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qbrush.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qpair.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvector.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qmatrix.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpolygon.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qregion.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qdatastream.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qiodevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qline.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtransform.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpainterpath.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qimage.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpixelformat.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpixmap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qshareddata.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qhash.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfont.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcursor.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qkeysequence.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qevent.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvariant.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qdebug.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtextstream.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlocale.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qset.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qurl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qurlquery.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfile.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfiledevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qvector2d.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintengine.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpainter.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtextoption.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpen.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QSurfaceFormat \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/joshua/NGL/include/ngl/Vec4.h \
+		/home/joshua/NGL/include/ngl/Vec2.h \
+		/home/joshua/NGL/include/ngl/Vec3.h \
+		/home/joshua/NGL/include/ngl/Mat4.h \
+		/home/joshua/NGL/include/ngl/RibExport.h \
+		/home/joshua/NGL/include/ngl/Plane.h \
+		/home/joshua/NGL/include/ngl/AABB.h \
+		/home/joshua/NGL/include/ngl/BBox.h \
+		/home/joshua/NGL/include/ngl/VertexArrayObject.h \
+		/home/joshua/NGL/include/ngl/Colour.h \
+		/home/joshua/NGL/include/ngl/Light.h \
+		/home/joshua/NGL/include/ngl/Text.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QHash \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QFont \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QOpenGLWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QPaintDeviceWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintdevicewindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QObject \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QEvent \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QMargins \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QRect \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qsurface.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qicon.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QPaintDevice \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QOpenGLContext \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglcontext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QScopedPointer \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QImage \
+		include/RainCloud.h \
+		include/RainDrop.h \
+		include/planeobj.h \
+		include/NGLScene.h
+	/home/joshua/Qt/5.5/gcc_64/bin/moc $(DEFINES) -I/home/joshua/Qt/5.5/gcc_64/mkspecs/linux-clang -I/home/joshua/Documents/Projects/Specialist/Specialist -I/home/joshua/Documents/Projects/Specialist/Specialist/include -I/home/joshua/NGL/include -I/home/joshua/Qt/5.5/gcc_64/include -I/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL -I/home/joshua/Qt/5.5/gcc_64/include/QtWidgets -I/home/joshua/Qt/5.5/gcc_64/include/QtGui -I/home/joshua/Qt/5.5/gcc_64/include/QtCore include/NGLScene.h -o moc/moc_NGLScene.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all:
+compiler_uic_make_all: ui_MainWindow.h
 compiler_uic_clean:
+	-$(DEL_FILE) ui_MainWindow.h
+ui_MainWindow.h: ui/MainWindow.ui
+	/home/joshua/Qt/5.5/gcc_64/bin/uic ui/MainWindow.ui -o ui_MainWindow.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: 
+compiler_clean: compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -508,16 +837,10 @@ obj/main.o: src/main.cpp /home/joshua/Qt/5.5/gcc_64/include/QtGui/QGuiApplicatio
 		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcontiguouscache.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qshareddata.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsize.h \
-		include/NGLScene.h \
-		/home/joshua/NGL/include/ngl/Camera.h \
-		/home/joshua/NGL/include/ngl/Types.h \
-		/home/joshua/NGL/include/ngl/glew.h \
-		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/QGLContext \
-		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qgl.h \
-		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengl.h \
-		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qt_windows.h \
-		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengles2ext.h \
-		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QApplication \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qapplication.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcursor.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qwidget.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmargins.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintdevice.h \
@@ -542,7 +865,6 @@ obj/main.o: src/main.cpp /home/joshua/Qt/5.5/gcc_64/include/QtGui/QGuiApplicatio
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontmetrics.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontinfo.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qsizepolicy.h \
-		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcursor.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qkeysequence.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qevent.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qurl.h \
@@ -551,6 +873,16 @@ obj/main.o: src/main.cpp /home/joshua/Qt/5.5/gcc_64/include/QtGui/QGuiApplicatio
 		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfiledevice.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qvector2d.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtouchdevice.h \
+		include/NGLScene.h \
+		/home/joshua/NGL/include/ngl/Camera.h \
+		/home/joshua/NGL/include/ngl/Types.h \
+		/home/joshua/NGL/include/ngl/glew.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/QGLContext \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qgl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qt_windows.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengles2ext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglext.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintengine.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpainter.h \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtextoption.h \
@@ -593,8 +925,217 @@ obj/main.o: src/main.cpp /home/joshua/Qt/5.5/gcc_64/include/QtGui/QGuiApplicatio
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QImage \
 		include/RainCloud.h \
 		include/RainDrop.h \
-		include/planeobj.h
+		include/planeobj.h \
+		include/MainWindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QMainWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qtabwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o src/main.cpp
+
+obj/MainWindow.o: src/MainWindow.cpp include/MainWindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QMainWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qwidget.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qglobal.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qconfig.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfeatures.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtypetraits.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsysinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlogging.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qflags.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_gcc.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv7.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv6.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_armv5.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_ia64.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_mips.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_x86.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qatomic_unix.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmutex.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qnumeric.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qnamespace.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobject.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstring.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qchar.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbytearray.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qrefcount.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qarraydata.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qalgorithms.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qiterator.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringlist.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qregexp.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcoreevent.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmetatype.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qisenum.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qobject_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmargins.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qrect.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsize.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qpoint.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpalette.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcolor.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qrgb.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qbrush.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qpair.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvector.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qmatrix.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpolygon.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qregion.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qdatastream.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qiodevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qline.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtransform.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpainterpath.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qimage.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpixelformat.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpixmap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qshareddata.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qhash.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfont.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qfontinfo.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qcursor.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qkeysequence.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qevent.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qvariant.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qmap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qdebug.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qtextstream.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qlocale.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qset.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qurl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qurlquery.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfile.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qfiledevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qvector2d.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qicon.h \
+		include/NGLScene.h \
+		/home/joshua/NGL/include/ngl/Camera.h \
+		/home/joshua/NGL/include/ngl/Types.h \
+		/home/joshua/NGL/include/ngl/glew.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/QGLContext \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qgl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengl.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qt_windows.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopengles2ext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintengine.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpainter.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qtextoption.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpen.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QSurfaceFormat \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/joshua/NGL/include/ngl/Vec4.h \
+		/home/joshua/NGL/include/ngl/Vec2.h \
+		/home/joshua/NGL/include/ngl/Vec3.h \
+		/home/joshua/NGL/include/ngl/Mat4.h \
+		/home/joshua/NGL/include/ngl/RibExport.h \
+		/home/joshua/NGL/include/ngl/Plane.h \
+		/home/joshua/NGL/include/ngl/AABB.h \
+		/home/joshua/NGL/include/ngl/BBox.h \
+		/home/joshua/NGL/include/ngl/VertexArrayObject.h \
+		/home/joshua/NGL/include/ngl/Colour.h \
+		/home/joshua/NGL/include/ngl/Light.h \
+		/home/joshua/NGL/include/ngl/Text.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QHash \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QFont \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QOpenGLWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QPaintDeviceWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qpaintdevicewindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QWindow \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qwindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QObject \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QEvent \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QMargins \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QRect \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qsurface.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QPaintDevice \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QOpenGLContext \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglcontext.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QScopedPointer \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/QImage \
+		include/RainCloud.h \
+		include/RainDrop.h \
+		include/planeobj.h \
+		ui_MainWindow.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/QVariant \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QAction \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qaction.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qactiongroup.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QApplication \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qapplication.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qeventloop.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qguiapplication.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qinputmethod.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QButtonGroup \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QGridLayout \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qlayout.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QGroupBox \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qgroupbox.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qframe.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QHeaderView \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qheaderview.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qstyleoption.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qvalidator.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtCore/qregularexpression.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qslider.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qabstractslider.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qstyle.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qtabbar.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QMenuBar \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qmenubar.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qmenu.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QSpacerItem \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QStatusBar \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/qstatusbar.h \
+		/home/joshua/Qt/5.5/gcc_64/include/QtWidgets/QWidget
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/MainWindow.o src/MainWindow.cpp
 
 obj/NGLScene.o: src/NGLScene.cpp /home/joshua/Qt/5.5/gcc_64/include/QtGui/QMouseEvent \
 		/home/joshua/Qt/5.5/gcc_64/include/QtGui/qevent.h \
@@ -770,7 +1311,7 @@ obj/NGLScene.o: src/NGLScene.cpp /home/joshua/Qt/5.5/gcc_64/include/QtGui/QMouse
 		/home/joshua/NGL/include/ngl/Mat3.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/NGLScene.o src/NGLScene.cpp
 
-obj/planeobj.o: src/planeobj.cpp 
+obj/planeobj.o: src/planeobj.cpp include/planeobj.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/planeobj.o src/planeobj.cpp
 
 obj/RainCloud.o: src/RainCloud.cpp include/RainCloud.h \
@@ -780,6 +1321,12 @@ obj/RainCloud.o: src/RainCloud.cpp include/RainCloud.h \
 
 obj/RainDrop.o: src/RainDrop.cpp include/RainDrop.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/RainDrop.o src/RainDrop.cpp
+
+obj/moc_MainWindow.o: moc/moc_MainWindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/moc_MainWindow.o moc/moc_MainWindow.cpp
+
+obj/moc_NGLScene.o: moc/moc_NGLScene.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/moc_NGLScene.o moc/moc_NGLScene.cpp
 
 ####### Install
 

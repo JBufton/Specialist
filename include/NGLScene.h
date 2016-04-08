@@ -4,7 +4,7 @@
 #include <ngl/Colour.h>
 #include <ngl/Light.h>
 #include <ngl/Text.h>
-#include <QOpenGLWindow>
+#include <QOpenGLWidget>
 #include <memory>
 
 #include "RainCloud.h"
@@ -22,14 +22,17 @@
 /// put in this file
 //----------------------------------------------------------------------------------------------------------------------
 
-class NGLScene : public QOpenGLWindow
+class NGLScene : public QOpenGLWidget
 {
+
+    Q_OBJECT
+
   public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief ctor for our NGL drawing class
     /// @param [in] parent the parent window to the class
     //----------------------------------------------------------------------------------------------------------------------
-    NGLScene();
+    NGLScene(QWidget *_parent);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief dtor must close down ngl and release OpenGL resources
     //----------------------------------------------------------------------------------------------------------------------
@@ -50,6 +53,33 @@ class NGLScene : public QOpenGLWindow
     void resizeGL(QResizeEvent *_event);
     // Qt 5.x uses this instead! http://doc.qt.io/qt-5/qopenglwindow.html#resizeGL
     void resizeGL(int _w, int _h);
+
+
+public slots :  //Slots for connections to the GUI
+    void SetWindXDir(double);
+    void SetWindYDir(double);
+    void SetWindZDir(double);
+    void SetDropsPerTick(int);
+
+    void SetNewPlaneXPos(double);
+    void SetNewPlaneYPos(double);
+    void SetNewPlaneZPos(double);
+
+    void SetNewPlaneXSize(double);
+    void SetNewPlaneZSize(double);
+
+    void SetNewPlaneXRot(double);
+    void SetNewPlaneZRot(double);
+
+    void SetNewPlaneRoughness(double);
+
+    void CreateNewPlane();
+
+    void DeletePlane();
+
+    void SetNewBoxXSize(double);
+    void SetNewBoxYSize(double);
+    void SetNewBoxZSize(double);
 
 
 private:
@@ -156,6 +186,15 @@ private:
     int NumberOfDrops;
     int DropsPerTick;
     float WindDir[3];
+
+    float NewPlaneXPos;
+    float NewPlaneYPos;
+    float NewPlaneZPos;
+    float NewPlaneXSize;
+    float NewPlaneZSize;
+    float NewPlaneXRot;
+    float NewPlaneZRot;
+    float NewPlaneRoughness;
 
 };
 

@@ -21,14 +21,13 @@ const static float INCREMENT=0.01;
 //----------------------------------------------------------------------------------------------------------------------
 const static float ZOOM=0.1;
 
-NGLScene::NGLScene()
+NGLScene::NGLScene(QWidget *_parent ) : QOpenGLWidget( _parent )
 {
   // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
   m_rotate=false;
   // mouse rotation values set to 0
   m_spinXFace=0;
   m_spinYFace=0;
-  setTitle("Qt5 Simple NGL Demo");
 
   BoxSizeX = 2.0;
   BoxSizeY = 2.0;
@@ -38,16 +37,19 @@ NGLScene::NGLScene()
   NumberOfPlanes = 0;
   DropsPerTick = 1;
 
-  WindDir[0] = 0.00001;
+  WindDir[0] = 0.0;
   WindDir[1] = 0.0;
-  WindDir[2] = 0.00001;
+  WindDir[2] = 0.0;
+
+
 
   m_data.resize(3*NumberOfDrops);
   Box.resize(58*sizeof(float));
   PlanesData.resize(18*NumberOfPlanes);
 
   CreateBox();
-  MainRainCloud.AddPlane(0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0);
+
+
 
 }
 
@@ -60,6 +62,145 @@ NGLScene::NGLScene()
 NGLScene::~NGLScene()
 {
   std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
+}
+
+
+
+
+void NGLScene::SetWindXDir(double NewWindXDir)
+{
+
+    WindDir[0] = NewWindXDir;
+
+    update();
+}
+
+void NGLScene::SetWindYDir(double NewWindYDir)
+{
+
+    WindDir[1] = NewWindYDir;
+
+    update();
+}
+
+void NGLScene::SetWindZDir(double NewWindZDir)
+{
+
+    WindDir[2] = NewWindZDir;
+
+    update();
+}
+
+void NGLScene::SetDropsPerTick(int NewDropsPerTick)
+{
+
+    DropsPerTick = NewDropsPerTick;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneXPos(double _NewPlaneXPos)
+{
+
+    NewPlaneXPos = _NewPlaneXPos;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneYPos(double _NewPlaneYPos)
+{
+
+    NewPlaneYPos = _NewPlaneYPos;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneZPos(double _NewPlaneZPos)
+{
+
+    NewPlaneZPos = _NewPlaneZPos;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneXSize(double _NewPlaneXSize)
+{
+
+    NewPlaneXSize = _NewPlaneXSize;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneZSize(double _NewPlaneZSize)
+{
+
+    NewPlaneZSize = _NewPlaneZSize;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneXRot(double _NewPlaneXRot)
+{
+
+    NewPlaneXRot = _NewPlaneXRot;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneZRot(double _NewPlaneZRot)
+{
+
+    NewPlaneZRot = _NewPlaneZRot;
+
+    update();
+}
+
+void NGLScene::SetNewPlaneRoughness(double _NewPlaneRoughness)
+{
+
+    NewPlaneRoughness = _NewPlaneRoughness;
+
+    update();
+}
+
+void NGLScene::CreateNewPlane()
+{
+
+    MainRainCloud.AddPlane(NewPlaneXPos, NewPlaneYPos, NewPlaneZPos, NewPlaneXSize, NewPlaneZSize, NewPlaneXRot, NewPlaneZRot, NewPlaneRoughness);
+
+    update();
+}
+
+void NGLScene::DeletePlane()
+{
+
+    MainRainCloud.DeletePlane();
+
+    update();
+}
+
+void NGLScene::SetNewBoxXSize(double NewBoxXSize)
+{
+
+    BoxSizeX = NewBoxXSize;
+
+    update();
+}
+
+void NGLScene::SetNewBoxYSize(double NewBoxYSize)
+{
+
+    BoxSizeY = NewBoxYSize;
+
+    update();
+}
+
+void NGLScene::SetNewBoxZSize(double NewBoxZSize)
+{
+
+    BoxSizeZ = NewBoxZSize;
+
+    update();
 }
 
 
@@ -288,6 +429,8 @@ void NGLScene::timerEvent(QTimerEvent *_event)
   NGL_UNUSED(_event);
   m_data.clear();
   PlanesData.clear();
+
+  CreateBox();
 
 
 

@@ -21,6 +21,7 @@ class RainCloud
 
     //----------Plane creation----------
     void AddPlane(float, float, float, float, float, float, float, float);
+    void DeletePlane();
 
     //----------Get Plane info---------
     void GetPlanesVertexs(float *);

@@ -27,6 +27,9 @@ OTHER_FILES+= README.md
 # were are going to default to a console app
 CONFIG += console
 
+FORMS+= $$PWD/ui/MainWindow.ui
+
+
 NGLPATH=$$(NGLDIR)
 isEmpty(NGLPATH){ # note brace must be here
 	message("including $HOME/NGL")
