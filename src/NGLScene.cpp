@@ -41,6 +41,15 @@ NGLScene::NGLScene(QWidget *_parent ) : QOpenGLWidget( _parent )
   WindDir[1] = 0.0;
   WindDir[2] = 0.0;
 
+  NewPlaneXPos = 0;
+  NewPlaneYPos = 0;
+  NewPlaneZPos = 0;
+  NewPlaneXSize = 1;
+  NewPlaneZSize = 1;
+  NewPlaneXRot = 0;
+  NewPlaneZRot = 0;
+  NewPlaneRoughness = 0;
+
 
 
   m_data.resize(3*NumberOfDrops);
@@ -382,7 +391,7 @@ void NGLScene::paintGL()
 	shader->setShaderParamFromMat4("MVP",MVP);
 
 
-
+    shader->setRegisteredUniform4f("Colour",1,1,1,1);
 
   ngl::VertexArrayObject *Boundary = ngl::VertexArrayObject::createVOA(GL_LINES);
   Boundary->bind();
@@ -394,6 +403,10 @@ void NGLScene::paintGL()
   Boundary->unbind();
   Boundary->removeVOA();
 
+
+  shader->setRegisteredUniform4f("Colour",0.75,0.75,1,1);
+
+
   //creating VAO for RainDrops
   ngl::VertexArrayObject *vao =ngl::VertexArrayObject::createVOA(GL_POINTS);
   vao->bind();
@@ -404,6 +417,10 @@ void NGLScene::paintGL()
   vao->draw();
   vao->unbind();
   vao->removeVOA();
+
+
+  shader->setRegisteredUniform4f("Colour",0.2,0.2,0.2,1);
+
 
     //VAO for poly planes
   ngl::VertexArrayObject *Planes =ngl::VertexArrayObject::createVOA(GL_TRIANGLES);

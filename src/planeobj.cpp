@@ -37,19 +37,34 @@ void plane::CalcNorm()
 
 int plane::IsOnPlane(float TestX, float TestY, float TestZ)
 {
+    float Tolerence = 0.0001;
 
-    /*
-     * Calculate the length of the vector between the point to test and the plane position (Test-Pos)
-     *
-     * Calculate the dot product between the new vector and the normal of the plane
-     *
-     * if the point it in front then result will be positive
-     * if the point is behind the plane then the result will be negative
-     * if the point is on the plane then the result will be 0
-     *
-     * then calculate if the point is within the boundaries of the actual plane shape
-     *
-     * */
+    float VecToDrop[3] = {Pos[0] - TestX,Pos[1] - TestY,Pos[2] - TestZ};
+
+    float PlaneNormal[3] = {0,1,0};
+
+    //Rotate Plane Normal by XRot and ZRot
+
+    float DotProd = ((VecToDrop[0]*PlaneNormal[0])+(VecToDrop[1]*PlaneNormal[1])+(VecToDrop[2]*PlaneNormal[2]));
+
+    if(DotProd < 0 + Tolerence && DotProd > 0 - Tolerence)
+    {
+
+        if(TestX < Pos[0] + (XSize/2) && TestX > Pos[0] - (XSize/2))
+        {
+
+            if(TestZ < Pos[2] + (ZSize/2) && TestZ > Pos[2] - (ZSize/2))
+            {
+
+                return 1;
+
+            }
+
+        }
+
+    }
+
+    return 0;
 
 }
 

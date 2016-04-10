@@ -186,6 +186,7 @@ public:
         NewPlaneXSize = new QDoubleSpinBox(BoidCreation);
         NewPlaneXSize->setObjectName(QStringLiteral("NewPlaneXSize"));
         NewPlaneXSize->setSingleStep(0.05);
+        NewPlaneXSize->setValue(1);
 
         gridLayout->addWidget(NewPlaneXSize, 6, 1, 1, 1);
 
@@ -197,6 +198,7 @@ public:
         NewPlaneZSize = new QDoubleSpinBox(BoidCreation);
         NewPlaneZSize->setObjectName(QStringLiteral("NewPlaneZSize"));
         NewPlaneZSize->setSingleStep(0.05);
+        NewPlaneZSize->setValue(1);
 
         gridLayout->addWidget(NewPlaneZSize, 6, 2, 1, 1);
 

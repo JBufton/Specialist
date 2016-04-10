@@ -179,6 +179,9 @@
          <property name="singleStep">
           <double>0.050000000000000</double>
          </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
         </widget>
        </item>
        <item row="3" column="3">
@@ -192,6 +195,9 @@
         <widget class="QDoubleSpinBox" name="NewPlaneZSize">
          <property name="singleStep">
           <double>0.050000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
          </property>
         </widget>
        </item>

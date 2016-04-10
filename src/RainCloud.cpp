@@ -35,11 +35,12 @@ void RainCloud::AddPlane(float XPos, float YPos, float ZPos, float XSize, float 
 
 void RainCloud::DeletePlane()
 {
+    if (NumberOfPlanes != 0)
+    {
+        PlaneList.pop_back();
 
-    PlaneList.pop_back();
-
-    NumberOfPlanes--;
-
+        NumberOfPlanes--;
+    }
 }
 
 
@@ -207,6 +208,7 @@ void RainCloud::SimulateFrame(float BoxSizeX, float BoxSizeY, float BoxSizeZ, fl
 
         DropsAttachedToObj.push_back(i);
 
+
         NumberOfDropsAttached++;
 
     }
@@ -239,6 +241,34 @@ void RainCloud::SimulateFrame(float BoxSizeX, float BoxSizeY, float BoxSizeZ, fl
 
 
   //----------Check for drops that have contacted an object and make them attached---------
+
+  float DropX;
+  float DropY;
+  float DropZ;
+
+
+  for (int i = 0; i < NumberOfRainDrops; i++)
+  {
+
+      DropX = RainDropList[i]->GetDropXPosition();
+      DropY = RainDropList[i]->GetDropYPosition();
+      DropZ = RainDropList[i]->GetDropZPosition();
+
+      for (int j = 0; j < NumberOfPlanes; j++)
+      {
+
+          if(PlaneList[j]->IsOnPlane(DropX,DropY,DropZ) == 1)
+          {
+
+              RainDropList[i]->AttachToObj();
+
+          }
+
+      }
+
+  }
+
+  //Create new drops that are derived from drops contacting the object
 
 
 }
