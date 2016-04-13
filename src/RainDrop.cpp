@@ -170,6 +170,95 @@ void RainDrop::WindResistance(float *WindResistanceArr)
 }
 
 
+void RainDrop::GroundPlaneFriction(float *FrictionArr)
+{
+
+    float FrictionNormal = Weight*9.81;
+    float CoefficientOfFriction = 0.3;
+    float FrictionalForce = CoefficientOfFriction*FrictionNormal;
+
+    //---Friction on the X
+    //Negative
+    if (Dir[0] < 0)
+    {
+
+        if (Dir[0] >= (FrictionalForce*-1))
+        {
+
+            FrictionArr[0] = (Dir[0]*-1);
+
+        }
+        else
+        {
+
+            FrictionArr[0] = FrictionalForce;
+
+        }
+
+    }
+
+    //Positive
+
+    if (Dir[0] > 0)
+    {
+
+        if (Dir[0] <= FrictionalForce)
+        {
+
+            FrictionArr[0] = (Dir[0]*-1);
+
+        }
+        else
+        {
+
+            FrictionArr[0] = (FrictionalForce*-1);
+
+        }
+
+    }
+
+    //---Friction on the Z
+    //Negative
+    if (Dir[2] < 0)
+    {
+
+        if (Dir[2] >= (FrictionalForce*-1))
+        {
+
+            FrictionArr[2] = (Dir[2]*-1);
+
+        }
+        else
+        {
+
+            FrictionArr[2] = FrictionalForce;
+
+        }
+
+    }
+
+    //Positive
+
+    if (Dir[2] > 0)
+    {
+
+        if (Dir[2] <= FrictionalForce)
+        {
+
+            FrictionArr[2] = (Dir[2]*-1);
+
+        }
+        else
+        {
+
+            FrictionArr[2] = (FrictionalForce*-1);
+
+        }
+
+    }
+
+}
+
 
 void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindArr)
 {
@@ -230,6 +319,27 @@ void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindA
             Dir[i] += WindResistanceArr[i];
 
         }
+
+        //----------Checking if Raindrop is at the bottom of the box and applying friction if so
+
+        if (Pos[1] <= ((BoxSizeY/2)*-1))
+        {
+
+            float GroundFrictionArr[3] = {0.0, 0.0, 0.0};
+
+            GroundPlaneFriction(&GroundFrictionArr[0]);
+
+            for (int i = 0; i < 3; i++)
+            {
+
+                Dir[i] += GroundFrictionArr[i];
+
+            }
+
+        }
+
+
+
 
         //---------------Apply Direction to Position------
 

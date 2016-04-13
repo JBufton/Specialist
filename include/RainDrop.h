@@ -50,6 +50,7 @@ class RainDrop
 
   void Wind(float *);  //calculates the Winds effect
   void WindResistance(float *); //based upon the resulting direction etc calculates the wind resistance (strength depending upon the weight
+  void GroundPlaneFriction(float *);    //Calculates the friction of the raindrops when they are on the floor
   float LengthOfVector(float, float, float);
 
 };
