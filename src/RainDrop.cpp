@@ -170,7 +170,6 @@ void RainDrop::WindResistance(float *WindResistanceArr)
 }
 
 
-
 void RainDrop::GroundPlaneFriction(float *FrictionArr)
 {
 
@@ -261,6 +260,7 @@ void RainDrop::GroundPlaneFriction(float *FrictionArr)
 }
 
 
+
 void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindArr)
 {
 
@@ -323,21 +323,22 @@ void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindA
 
         //----------Checking if Raindrop is at the bottom of the box and applying friction if so
 
-                if (Pos[1] <= ((BoxSizeY/2)*-1))
-                {
+        if (Pos[1] <= ((BoxSizeY/2)*-1))
+        {
 
-                    float GroundFrictionArr[3] = {0.0, 0.0, 0.0};
+            float GroundFrictionArr[3] = {0.0, 0.0, 0.0};
 
-                    GroundPlaneFriction(&GroundFrictionArr[0]);
+            GroundPlaneFriction(&GroundFrictionArr[0]);
 
-                    for (int i = 0; i < 3; i++)
-                    {
+            for (int i = 0; i < 3; i++)
+            {
 
-                        Dir[i] += GroundFrictionArr[i];
+                Dir[i] += GroundFrictionArr[i];
 
-                    }
+            }
 
-                }
+        }
+
 
         //---------------Apply Direction to Position------
 
