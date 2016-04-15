@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'NGLScene.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.5.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.5.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,15 +12,15 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'NGLScene.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.5.1. It"
+#error "This file was generated using the moc from 5.5.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_NGLScene_t {
-    QByteArrayData data[19];
-    char stringdata0[269];
+    QByteArrayData data[21];
+    char stringdata0[313];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -47,7 +47,9 @@ QT_MOC_LITERAL(14, 197, 14), // "CreateNewPlane"
 QT_MOC_LITERAL(15, 212, 11), // "DeletePlane"
 QT_MOC_LITERAL(16, 224, 14), // "SetNewBoxXSize"
 QT_MOC_LITERAL(17, 239, 14), // "SetNewBoxYSize"
-QT_MOC_LITERAL(18, 254, 14) // "SetNewBoxZSize"
+QT_MOC_LITERAL(18, 254, 14), // "SetNewBoxZSize"
+QT_MOC_LITERAL(19, 269, 18), // "SetWindCoefficient"
+QT_MOC_LITERAL(20, 288, 24) // "SetCoefficientOfFriction"
 
     },
     "NGLScene\0SetWindXDir\0\0SetWindYDir\0"
@@ -57,7 +59,8 @@ QT_MOC_LITERAL(18, 254, 14) // "SetNewBoxZSize"
     "SetNewPlaneXRot\0SetNewPlaneZRot\0"
     "SetNewPlaneRoughness\0CreateNewPlane\0"
     "DeletePlane\0SetNewBoxXSize\0SetNewBoxYSize\0"
-    "SetNewBoxZSize"
+    "SetNewBoxZSize\0SetWindCoefficient\0"
+    "SetCoefficientOfFriction"
 };
 #undef QT_MOC_LITERAL
 
@@ -67,7 +70,7 @@ static const uint qt_meta_data_NGLScene[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      19,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -75,23 +78,25 @@ static const uint qt_meta_data_NGLScene[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   99,    2, 0x0a /* Public */,
-       3,    1,  102,    2, 0x0a /* Public */,
-       4,    1,  105,    2, 0x0a /* Public */,
-       5,    1,  108,    2, 0x0a /* Public */,
-       6,    1,  111,    2, 0x0a /* Public */,
-       7,    1,  114,    2, 0x0a /* Public */,
-       8,    1,  117,    2, 0x0a /* Public */,
-       9,    1,  120,    2, 0x0a /* Public */,
-      10,    1,  123,    2, 0x0a /* Public */,
-      11,    1,  126,    2, 0x0a /* Public */,
-      12,    1,  129,    2, 0x0a /* Public */,
-      13,    1,  132,    2, 0x0a /* Public */,
-      14,    0,  135,    2, 0x0a /* Public */,
-      15,    0,  136,    2, 0x0a /* Public */,
-      16,    1,  137,    2, 0x0a /* Public */,
-      17,    1,  140,    2, 0x0a /* Public */,
-      18,    1,  143,    2, 0x0a /* Public */,
+       1,    1,  109,    2, 0x0a /* Public */,
+       3,    1,  112,    2, 0x0a /* Public */,
+       4,    1,  115,    2, 0x0a /* Public */,
+       5,    1,  118,    2, 0x0a /* Public */,
+       6,    1,  121,    2, 0x0a /* Public */,
+       7,    1,  124,    2, 0x0a /* Public */,
+       8,    1,  127,    2, 0x0a /* Public */,
+       9,    1,  130,    2, 0x0a /* Public */,
+      10,    1,  133,    2, 0x0a /* Public */,
+      11,    1,  136,    2, 0x0a /* Public */,
+      12,    1,  139,    2, 0x0a /* Public */,
+      13,    1,  142,    2, 0x0a /* Public */,
+      14,    0,  145,    2, 0x0a /* Public */,
+      15,    0,  146,    2, 0x0a /* Public */,
+      16,    1,  147,    2, 0x0a /* Public */,
+      17,    1,  150,    2, 0x0a /* Public */,
+      18,    1,  153,    2, 0x0a /* Public */,
+      19,    1,  156,    2, 0x0a /* Public */,
+      20,    1,  159,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Double,    2,
@@ -108,6 +113,8 @@ static const uint qt_meta_data_NGLScene[] = {
     QMetaType::Void, QMetaType::Double,    2,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Double,    2,
+    QMetaType::Void, QMetaType::Double,    2,
     QMetaType::Void, QMetaType::Double,    2,
     QMetaType::Void, QMetaType::Double,    2,
     QMetaType::Void, QMetaType::Double,    2,
@@ -138,6 +145,8 @@ void NGLScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 14: _t->SetNewBoxXSize((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 15: _t->SetNewBoxYSize((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 16: _t->SetNewBoxZSize((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 17: _t->SetWindCoefficient((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 18: _t->SetCoefficientOfFriction((*reinterpret_cast< double(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -168,13 +177,13 @@ int NGLScene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 19)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 19;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 19)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 17;
+        _id -= 19;
     }
     return _id;
 }

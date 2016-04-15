@@ -11,7 +11,7 @@ RainDrop::RainDrop(float BoxX, float BoxY, float BoxZ)
     Dir[1] = 0.0;
     Dir[2] = RandNum(-0.001, 0.001);
 
-    Weight = RandNum(0.00001, 0.0001);
+    Weight = RandNum(0.00001, 0.0005);
 
     Size = Weight*100;
 
@@ -111,10 +111,9 @@ float RainDrop::LengthOfVector(float x, float y, float z)
 
 
 
-void RainDrop::WindResistance(float *WindResistanceArr)
+void RainDrop::WindResistance(float *WindResistanceArr, float Coefficient)
 {
     float AreaFacingWind = ((2*Size)*(2*Size));
-    float Coefficient = 0.5;
     float AirDensity = 0.45;  //  kg/m^3
 
     //---------------------X Air Resistance--------------------------------
@@ -170,11 +169,10 @@ void RainDrop::WindResistance(float *WindResistanceArr)
 }
 
 
-void RainDrop::GroundPlaneFriction(float *FrictionArr)
+void RainDrop::GroundPlaneFriction(float *FrictionArr, float CoefficientOfFriction)
 {
 
     float FrictionNormal = Weight*9.81;
-    float CoefficientOfFriction = 0.3;
     float FrictionalForce = CoefficientOfFriction*FrictionNormal;
 
     //---Friction on the X
@@ -261,9 +259,8 @@ void RainDrop::GroundPlaneFriction(float *FrictionArr)
 
 
 
-void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindArr)
+void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindArr, float WindCoefficient, float CoefficientOfFriction)
 {
-
     /*
    *
    *
@@ -281,6 +278,14 @@ void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindA
     if (AttachedToObj == 0)
     {
 
+      //---------Storing previous direction
+      for (int i = 0; i < 3; i++)
+      {
+
+        PreviousDir[i] = Dir[i];
+
+      }
+
         //---------------Calculate Gravity----------------
         float GravityArr[3] = {0.0, 0.0, 0.0};
 
@@ -295,7 +300,7 @@ void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindA
 
         }
 
-        //---------------Apply Wind influence----------
+        //---------------Apply W    float Coefficient = 0.5;ind influence----------
 
         for (int i = 0; i < 3; i++)
         {
@@ -312,7 +317,7 @@ void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindA
 
         float WindResistanceArr[3] = {0.0, 0.0, 0.0};
 
-        WindResistance(&WindResistanceArr[0]);
+        WindResistance(&WindResistanceArr[0], WindCoefficient);
 
         for (int i = 0; i < 3; i++)
         {
@@ -328,16 +333,28 @@ void RainDrop::Move(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindA
 
             float GroundFrictionArr[3] = {0.0, 0.0, 0.0};
 
-            GroundPlaneFriction(&GroundFrictionArr[0]);
+            GroundPlaneFriction(&GroundFrictionArr[0], CoefficientOfFriction);
 
-            for (int i = 0; i < 3; i++)
+
+                Dir[0] += GroundFrictionArr[0]; //Only applies on X and Z axis
+                Dir[2] += GroundFrictionArr[2];
+
+            //-------Calculating Bounce of the Raindrop as it hits the ground
+
+            if (OnGroundPreviousFrame == 0)
             {
 
-                Dir[i] += GroundFrictionArr[i];
+
+              Dir[1] += ((PreviousDir[1]*-1)*RandNum(0.05,0.1)); //Multiplying by a random number between 0.1 and 0.2 to simulate the kinetic energy absorbed by the ground
+
 
             }
 
+            OnGroundPreviousFrame = 1;
+
+
         }
+        else OnGroundPreviousFrame = 0;
 
 
         //---------------Apply Direction to Position------

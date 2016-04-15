@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent), m_ui(new Ui::MainW
     connect(m_ui->WindY,SIGNAL(valueChanged(double)),m_gl,SLOT(SetWindYDir(double)));
     connect(m_ui->WindZ,SIGNAL(valueChanged(double)),m_gl,SLOT(SetWindZDir(double)));
 
+
+
     connect(m_ui->NewPlaneX,SIGNAL(valueChanged(double)),m_gl,SLOT(SetNewPlaneXPos(double)));
     connect(m_ui->NewPlaneY,SIGNAL(valueChanged(double)),m_gl,SLOT(SetNewPlaneYPos(double)));
     connect(m_ui->NewPlaneZ,SIGNAL(valueChanged(double)),m_gl,SLOT(SetNewPlaneZPos(double)));
@@ -35,6 +37,9 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent), m_ui(new Ui::MainW
     connect(m_ui->BoxSizeX,SIGNAL(valueChanged(double)),m_gl,SLOT(SetNewBoxXSize(double)));
     connect(m_ui->BoxSizeY,SIGNAL(valueChanged(double)),m_gl,SLOT(SetNewBoxYSize(double)));
     connect(m_ui->BoxSizeZ,SIGNAL(valueChanged(double)),m_gl,SLOT(SetNewBoxZSize(double)));
+
+    connect(m_ui->WindRes,SIGNAL(valueChanged(double)),m_gl,SLOT(SetWindCoefficient(double)));
+    connect(m_ui->FrictionRes,SIGNAL(valueChanged(double)),m_gl,SLOT(SetCoefficientOfFriction(double)));
 
 
 }

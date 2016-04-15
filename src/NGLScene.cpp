@@ -50,6 +50,9 @@ NGLScene::NGLScene(QWidget *_parent ) : QOpenGLWidget( _parent )
   NewPlaneZRot = 0;
   NewPlaneRoughness = 0;
 
+  WindCoefficient = 0.5;
+  CoefficientOfFriction = 0.3;
+
 
 
   m_data.resize(3*NumberOfDrops);
@@ -73,6 +76,27 @@ NGLScene::~NGLScene()
   std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
 }
 
+
+
+void NGLScene::SetWindCoefficient(double NewWindCoefficient)
+{
+
+  WindCoefficient = NewWindCoefficient;
+
+  update();
+
+}
+
+
+
+void NGLScene::SetCoefficientOfFriction(double NewCoefficientOfFriction)
+{
+
+  CoefficientOfFriction = NewCoefficientOfFriction;
+
+  update();
+
+}
 
 
 
@@ -451,7 +475,7 @@ void NGLScene::timerEvent(QTimerEvent *_event)
 
 
 
-  MainRainCloud.SimulateFrame(BoxSizeX, BoxSizeY, BoxSizeZ, &WindDir[0], DropsPerTick);
+  MainRainCloud.SimulateFrame(BoxSizeX, BoxSizeY, BoxSizeZ, &WindDir[0], DropsPerTick, WindCoefficient, CoefficientOfFriction);
 
   NumberOfPlanes = MainRainCloud.GetNumberOfPlanes();
 

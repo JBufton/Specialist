@@ -31,7 +31,7 @@ class RainCloud
     int GetNumberOfRainDrops(){ return NumberOfRainDrops; }
     void GetDropsPositions(float *);
     void GetDropPosition(int, float *);
-    void SimulateFrame(float, float, float, float *, int);
+    void SimulateFrame(float, float, float, float *, int, float, float);
     void DeleteOnWallContact(int, float, float);
 
     void SimulateDropOnObject(int);

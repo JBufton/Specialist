@@ -81,6 +81,9 @@ public slots :  //Slots for connections to the GUI
     void SetNewBoxYSize(double);
     void SetNewBoxZSize(double);
 
+    void SetWindCoefficient(double);
+    void SetCoefficientOfFriction(double);
+
 
 private:
     //----------------------------------------------------------------------------------------------------------------------
@@ -195,6 +198,9 @@ private:
     float NewPlaneXRot;
     float NewPlaneZRot;
     float NewPlaneRoughness;
+
+    float WindCoefficient;
+    float CoefficientOfFriction;
 
 };
 

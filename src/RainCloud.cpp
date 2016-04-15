@@ -189,7 +189,7 @@ void RainCloud::SimulateDropOnObject(int DropNumber)
 
 
 
-void RainCloud::SimulateFrame(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindDir, int RainDropsPerFrame)
+void RainCloud::SimulateFrame(float BoxSizeX, float BoxSizeY, float BoxSizeZ, float *WindDir, int RainDropsPerFrame, float WindCoefficient, float CoefficientOfFriction)
 {
   //----------Add new raindrops to scene----------
 
@@ -233,7 +233,7 @@ void RainCloud::SimulateFrame(float BoxSizeX, float BoxSizeY, float BoxSizeZ, fl
   for (int i = 0; i < NumberOfRainDrops; i++)
   {
 
-    RainDropList[i]->Move(BoxSizeX, BoxSizeY, BoxSizeZ, &WindDir[0]);
+    RainDropList[i]->Move(BoxSizeX, BoxSizeY, BoxSizeZ, &WindDir[0], WindCoefficient, CoefficientOfFriction);
 
     DeleteOnWallContact(i, BoxSizeX, BoxSizeZ);
 
