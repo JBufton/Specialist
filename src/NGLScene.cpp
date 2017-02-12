@@ -10,6 +10,7 @@
 #include <ngl/VAOPrimitives.h>
 #include <ngl/Random.h>
 #include <ngl/ShaderLib.h>
+#include <ngl/VertexArrayObject.h>
 
 
 //----------------------------------------------------------------------------------------------------------------------

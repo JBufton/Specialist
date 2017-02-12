@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'NGLScene.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.5.0)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.4.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'NGLScene.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.5.0. It"
+#error "This file was generated using the moc from 5.4.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,11 +20,11 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_NGLScene_t {
     QByteArrayData data[21];
-    char stringdata0[313];
+    char stringdata[313];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_NGLScene_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_NGLScene_t, stringdata) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_NGLScene_t qt_meta_stringdata_NGLScene = {
@@ -126,7 +126,6 @@ void NGLScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         NGLScene *_t = static_cast<NGLScene *>(_o);
-        Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->SetWindXDir((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 1: _t->SetWindYDir((*reinterpret_cast< double(*)>(_a[1]))); break;
@@ -166,7 +165,7 @@ const QMetaObject *NGLScene::metaObject() const
 void *NGLScene::qt_metacast(const char *_clname)
 {
     if (!_clname) return Q_NULLPTR;
-    if (!strcmp(_clname, qt_meta_stringdata_NGLScene.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_NGLScene.stringdata))
         return static_cast<void*>(const_cast< NGLScene*>(this));
     return QOpenGLWidget::qt_metacast(_clname);
 }
